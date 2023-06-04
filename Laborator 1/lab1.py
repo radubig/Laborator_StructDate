@@ -1,48 +1,106 @@
-# Comparatie Selection Sort vs Heapsort pt o permutare aleatoare
+from numpy import random
+import time
 
-import numpy;
+class Vector:
+    def __init__(self, colection) -> None:
+        self._v = []
+        for x in colection:
+            self._v.append(x)
 
-def selection_sort(v: list):
-    n = len(v)
-    for i in range(n-1):
-        mn = i
-        for j in range(i+1, n):
-            if v[j] < v[mn]:
-                mn = j
-        v[mn], v[i] = v[i], v[mn]
+    def getData(self):
+        return self._v
+    
+    def __str__(self) -> str:
+        return str(self._v)
+    
+    def __getitem__(self, key):
+        return self._v[key]
+    
+    def __setitem__(self, key, value):
+        self._v[key] = value
+
+    def FindMaxAndSwap(self, right):
+        # Implementation of FindMaxAndSwap in O(n)
+        mx = right
+        for j in range(right):
+            if self[j] > self[mx]:
+                mx = j
+        if mx != right:
+            self[right], self[mx] = self[mx], self[right]
 
 
-def heapify(v: list, ind: int, lmax: int):
-    fr_st = ind*2+1
-    fr_dr = ind*2+2
-    val_st = v[fr_st] if fr_st <= lmax else lmax+1
-    val_dr = v[fr_dr] if fr_dr <= lmax else lmax+1
-    val_mx = min(val_st, val_dr)
-    fr_mx = fr_st if val_st >= val_dr else fr_dr
-    if v[ind] > val_mx:
-        v[ind], v[fr_mx] = v[fr_mx], v[ind]
-        heapify(v, fr_mx, lmax)
+class Heap:
+    def __init__(self, colection) -> None:
+        self._v = []
+        for x in colection:
+            self._v.append(x)
+
+        # Make the list a maxheap
+        N = len(self._v)
+        for i in range(N // 2 - 1, -1, -1):
+            self.heapify(i, N)
+
+    def getData(self):
+        return self._v
+    
+    def __str__(self):
+        return str(self._v)
+    
+    def __getitem__(self, key):
+        return self._v[key]
+    
+    def heapify(self, root, N):
+        mx = root
+        l = 2 * root + 1
+        r = 2 * root + 2
+
+        # Verify that left child exists and is maximum
+        if l < N and self[mx] < self[l] :
+            mx = l
+
+        # Verify that right child exists and is maximum
+        if r < N and self[mx] < self[r] :
+            mx = r
+
+        if mx != root:
+            self._v[mx], self._v[root] = self._v[root], self._v[mx]
+            self.heapify(mx, N)
+    
+    def FindMaxAndSwap(self, right):
+        # The maximum element is swapped in O(1)
+        self._v[0], self._v[right] = self._v[right], self._v[0]
+        # However, we need to call heapify() in O(log n)
+        self.heapify(0, right)
 
 
-def heapsort(v: list):
-    n = len(v)
-    # Build max heap
-    for i in range(n//2-1, -1, -1):
-        heapify(v, i, n-1)
-    # Actual sorting by constantly removing the maximum element
+def Sort(v : Vector | Heap) -> None:
+    n = len(v.getData())
     for i in range(n-1, 0, -1):
-        v[0], v[i] = v[i], v[0]
-        heapify(v, 0, i-1)
+        v.FindMaxAndSwap(i)
 
 
 if __name__ == '__main__':
-    lst1 = numpy.random.permutation(8)
-    print("sir initial:")
-    print(lst1)
-    lst2 = [x for x in lst1]
-    selection_sort(lst1)
-    print("selection sort:")
-    print(lst1)
-    print("\nheap sort:")
-    heapsort(lst2)
-    print(lst2)
+    n = 20000
+    #print(vector)
+    #print(heap)
+    
+    for i in range(5):
+        print(f"Test {i}:")
+        perm = random.permutation(n)
+        print(f"Generated permutation with {n} elements.")
+
+        ts = time.perf_counter()
+        vector = Vector(perm)
+        Sort(vector)
+        tf = time.perf_counter()
+        print(f"Sort on vector performed in {tf - ts:0.4f} seconds.")
+
+        ts = time.perf_counter()
+        heap = Heap(perm)
+        Sort(heap)
+        tf = time.perf_counter()
+        print(f"Sort on heap performed in {tf - ts:0.4f} seconds.")
+        print()
+
+    #print(vector)
+    #print(heap)

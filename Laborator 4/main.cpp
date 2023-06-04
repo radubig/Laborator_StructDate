@@ -1,5 +1,6 @@
 #include <iostream>
 #include <fstream>
+#include <sstream>
 #include <cstring>
 #include <stack>
 
@@ -71,7 +72,10 @@ template<typename T> void SyntaxTree<T>::buildFromString(char* sir)
         }
         else // e numar
         {
-            T number = atoll(p);
+            stringstream ss;
+            ss << p;
+            T number;
+            ss >> number;
             auto nod = st.top();
             st.pop();
             nod->type = Node<T>::node_type::number;

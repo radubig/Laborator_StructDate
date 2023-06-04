@@ -1,6 +1,7 @@
 #ifndef JOSEPHUS_PROBLEM_LINKEDLIST_H
 #define JOSEPHUS_PROBLEM_LINKEDLIST_H
 
+#include <ostream>
 #include "Node.h"
 
 template <typename T>
@@ -42,12 +43,15 @@ public:
     void set_current(unsigned int index)
     {
         current = first;
-        while(index--) current = current->next;
+        if(index == 0)
+            current = last;
+        else while(--index > 0)
+            current = current->next;
     }
 
     void move_current(unsigned int positions)
     {
-        while(positions--) current = current->next;
+        while(positions-- > 0) current = current->next;
     }
 
     void delete_next()
@@ -61,13 +65,26 @@ public:
         if(size == 0) first = last = current = nullptr;
     }
 
-    [[maybe_unused]] T& get_next() {return current->next->value;}
+    T& get_next() {return current->next->value;}
 
     T& get_current() {return current->value;}
 
     size_t get_size() const {return size;}
 
-protected:
+    friend std::ostream& operator<< (std::ostream& os, const CircularList<T>& list)
+    {
+        Node<T> *i = list.first;
+        os << i->value << " ";
+        i = i->next;
+        while(i != list.first)
+        {
+            os << i->value << " ";
+            i = i->next;
+        }
+        return os;
+    }
+
+private:
     Node<T> *first, *last, *current;
     size_t size;
 };

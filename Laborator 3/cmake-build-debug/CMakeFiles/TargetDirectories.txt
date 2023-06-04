@@ -1,3 +1,0 @@
-/home/radu/work/Proiecte Universitate/Laborator SD/Laborator 3/cmake-build-debug/CMakeFiles/Laborator_3.dir
-/home/radu/work/Proiecte Universitate/Laborator SD/Laborator 3/cmake-build-debug/CMakeFiles/edit_cache.dir
-/home/radu/work/Proiecte Universitate/Laborator SD/Laborator 3/cmake-build-debug/CMakeFiles/rebuild_cache.dir

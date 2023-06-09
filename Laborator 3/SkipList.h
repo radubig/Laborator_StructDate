@@ -5,7 +5,7 @@
 #include <cstring>
 #include <random>
 
-template <typename KeyType, typename ValueType>
+template <comparabil KeyType, typename ValueType>
 class SkipList
 {
     const int maxLevel;
@@ -77,22 +77,6 @@ public:
             newNode->forward[i] = update[i]->forward[i];
             update[i]->forward[i] = newNode;
         }
-    }
-
-    ValueType search(KeyType key)
-    {
-        SkipNode<KeyType, ValueType>* current = head;
-
-        for (int i = level; i >= 0; i--) {
-            while (current->forward[i] != nullptr && current->forward[i]->key <= key) {
-                if (current->forward[i]->key == key) {
-                    return current->forward[i]->value;
-                }
-                current = current->forward[i];
-            }
-        }
-
-        return ValueType();
     }
 
     void remove(const KeyType& key)

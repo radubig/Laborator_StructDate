@@ -81,6 +81,7 @@ public:
         {
             delete last;
             last = node;
+            last->next = nullptr;
         }
     }
 
